@@ -1,5 +1,7 @@
 # PhishShield AI
 
+![PhishShield AI Cover Banner](assets/chatgpt_cover.png)
+
 Automated phishing detection system with multi-agent security analysis and human-in-the-loop review.
 
 ## Prerequisites
@@ -19,6 +21,8 @@ make playground        # opens UI at http://localhost:18081
 ```
 
 ## Architecture
+
+![PhishShield AI Architecture](assets/chatgpt_architecture.png)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -65,32 +69,41 @@ make playground        # opens UI at http://localhost:18081
 ## Sample Test Cases
 
 ### Test Case 1: Safe Email
+
 **Input**:
+
 ```json
 {
   "email_content": "Hi team, just a reminder about the meeting tomorrow at 2 PM in conference room B. Please bring your laptop. Thanks, Sarah"
 }
 ```
+
 **Expected**: Path: Orchestrator → Security → Gatekeeper → Analyst → Archive
 **Check**: Threat score ≤ 7, status SAFE_TO_ARCHIVE
 
 ### Test Case 2: Phishing with Urgency
+
 **Input**:
+
 ```json
 {
   "email_content": "URGENT: Your account will be suspended within 24 hours unless you verify your information immediately at http://verify-account-secure-login.com/update"
 }
 ```
+
 **Expected**: Path: Orchestrator → Security → Gatekeeper → Analyst → Human Review
 **Check**: Threat score > 7, status CRITICAL_HALT, domain flagged as suspicious
 
 ### Test Case 3: PII with Financial Terms
+
 **Input**:
+
 ```json
 {
   "email_content": "Please wire transfer $5000 to account 1234-5678-9012-3456. Routing number: 021000021. Contact me at john@example.com"
 }
 ```
+
 **Expected**: Path: Orchestrator → Security → Gatekeeper → Analyst → Human Review
 **Check**: PII redacted to [REDACTED], financial content WARNING, human review triggered
 
@@ -98,7 +111,7 @@ make playground        # opens UI at http://localhost:18081
 
 1. **Playground won't start**: Ensure port 18081 is not in use. Kill existing process: `Get-Process -Id (Get-NetTCPConnection -LocalPort 18081 -ErrorAction SilentlyContinue).OwningProcess | Stop-Process -Force`
 2. **MCP tools not working**: Verify mcp_server.py is in app/ directory and dependencies are installed
-3. **404 model error**: Check .env has GEMINI_MODEL=gemini-2.5-flash (not gemini-1.5-*)
+3. **404 model error**: Check .env has GEMINI_MODEL=gemini-2.5-flash (not gemini-1.5-\*)
 
 ## Push to GitHub
 
@@ -108,6 +121,7 @@ make playground        # opens UI at http://localhost:18081
    - Do NOT initialize with README
 
 2. In your terminal:
+
    ```bash
    cd phishshield-ai
    git init
@@ -118,7 +132,7 @@ make playground        # opens UI at http://localhost:18081
    git push -u origin main
    ```
 
-3. Verify .gitignore includes: .env, .venv/, __pycache__/, *.pyc, .adk/
+3. Verify .gitignore includes: .env, .venv/, **pycache**/, \*.pyc, .adk/
 
 ⚠ NEVER push .env to GitHub. Your API key will be exposed publicly.
 
