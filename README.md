@@ -1,6 +1,6 @@
 # PhishShield AI
 
-![PhishShield AI Cover Banner](assets/chatgpt_cover.png)
+![PhishShield AI Cover Banner](assets/cover.png)
 
 Automated phishing detection system with multi-agent security analysis and human-in-the-loop review.
 
@@ -22,7 +22,7 @@ make playground        # opens UI at http://localhost:18081
 
 ## Architecture
 
-![PhishShield AI Architecture](assets/chatgpt_architecture.png)
+![PhishShield AI Architecture](assets/architecture.png)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
