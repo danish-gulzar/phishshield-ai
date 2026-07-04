@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhishShield AI — Threat Investigation Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/index.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="app-container">
+        <!-- Sidebar / Header -->
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        <path d="M12 8v4"/>
+                        <path d="M12 16h.01"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>PHISHSHIELD<span>AI</span></h1>
+                    <p>Multi-Agent Threat Triage & Security Guard</p>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <span class="pulse"></span>
+                <span>Security Engine Active</span>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="main-workspace">
+            <!-- Left Panel: Input & Controls -->
+            <section class="panel-left card">
+                <div class="card-header">
+                    <h2>Suspicious Email Analysis</h2>
+                    <p>Paste the raw email header and content to begin inspection.</p>
+                </div>
+                <div class="card-body">
+                    <div class="input-wrapper">
+                        <textarea id="email-input" placeholder="Paste email content here (e.g. From:..., Subject:..., Body:...)"></textarea>
+                        <button id="clear-btn" class="icon-btn" title="Clear input">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Demo Presets -->
+                    <div class="demo-section">
+                        <h3>Load Test Case Scenario</h3>
+                        <div class="demo-buttons">
+                            <button class="demo-btn secondary" data-case="safe">
+                                <span class="badge badge-safe"></span> Business Mail
+                            </button>
+                            <button class="demo-btn secondary" data-case="phishing">
+                                <span class="badge badge-danger"></span> Urgent Phish
+                            </button>
+                            <button class="demo-btn secondary" data-case="pii">
+                                <span class="badge badge-warning"></span> Financial PII
+                            </button>
+                            <button class="demo-btn secondary" data-case="injection">
+                                <span class="badge badge-info"></span> Prompt Injection
+                            </button>
+                            <button class="demo-btn secondary" data-case="typo">
+                                <span class="badge badge-danger"></span> Typosquatting
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="analyze-btn" class="primary-btn">
+                        <span>Run Security Scan</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right Panel: Dynamic Results -->
+            <section class="panel-right">
+                <!-- Idle State -->
+                <div id="idle-state" class="card empty-state">
+                    <div class="empty-icon">
+                        <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 16v-4"/>
+                            <path d="M12 8h.01"/>
+                        </svg>
+                    </div>
+                    <h3>Awaiting Investigation</h3>
+                    <p>Paste email text on the left and start the multi-agent security scan to check for threat indicators, prompt injections, and PII exposure.</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="card empty-state hide">
+                    <div class="spinner-container">
+                        <div class="cyber-spinner"></div>
+                        <div class="logo-inner-icon">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Scanning Email Channels...</h3>
+                    <div class="progress-steps">
+                        <div class="step active" id="step-pii">Scrubbing PII & API Keys</div>
+                        <div class="step" id="step-injection">Checking Prompt Injection</div>
+                        <div class="step" id="step-tone">Analyzing Tone Indicators</div>
+                        <div class="step" id="step-reputation">Evaluating Link Reputation</div>
+                    </div>
+                </div>
+
+                <!-- Results State -->
+                <div id="results-state" class="results-container hide">
+                    <!-- Top Alert Header -->
+                    <div class="result-header-card card" id="decision-card">
+                        <div class="verdict-banner">
+                            <div class="verdict-icon" id="verdict-icon-container"></div>
+                            <div class="verdict-text">
+                                <span class="verdict-title" id="verdict-title">SAFE_TO_ARCHIVE</span>
+                                <p class="verdict-desc" id="verdict-desc">This email has been fully audited and is verified safe to store.</p>
+                            </div>
+                        </div>
+                        <div class="threat-gauge-box">
+                            <div class="gauge-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="bg" cx="50" cy="50" r="42"/>
+                                    <circle class="meter" id="gauge-meter" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="264"/>
+                                </svg>
+                                <div class="gauge-value">
+                                    <span id="threat-score-value">1</span>
+                                    <p>SCORE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="metrics-grid">
+                        <!-- PII & Security Node -->
+                        <div class="metric-card card">
+                            <h3>Security Checkpoint</h3>
+                            <div class="metric-body">
+                                <div class="status-row">
+                                    <span class="label">PII Scrubbed:</span>
+                                    <span class="value badge" id="pii-scrubbed-badge">0 items</span>
+                                </div>
+                                <div class="status-row">
+                                    <span class="label">Prompt Injection:</span>
+                                    <span class="value badge" id="injection-badge">SAFE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tone Triage Node -->
+                        <div class="metric-card card">
+                            <h3>Tone Analysis</h3>
+                            <div class="metric-body">
+                                <div class="status-row">
+                                    <span class="label">Threat Language:</span>
+                                    <span class="value" id="tone-threat-value">None</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Link Audit Node -->
+                        <div class="metric-card card span-two">
+                            <h3>Domain & URL Safety</h3>
+                            <div class="metric-body">
+                                <ul class="domain-list" id="domain-reputation-list">
+                                    <li class="empty-list-msg">No links detected to check.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Redacted Email Preview -->
+                    <div class="redacted-preview-card card">
+                        <div class="card-header-sm">
+                            <h3>Sanitized Email Body</h3>
+                            <span class="sub-label">Filtered Preview</span>
+                        </div>
+                        <div class="preview-box code-font" id="redacted-body-preview">
+                            No content.
+                        </div>
+                    </div>
+
+                    <!-- Detailed Agent Summary -->
+                    <div class="reasoning-card card">
+                        <div class="card-header-sm">
+                            <h3>Agent Investigation Logs</h3>
+                            <span class="sub-label">Detailed Analysis & Rationale</span>
+                        </div>
+                        <div class="reasoning-box" id="reasoning-text">
+                            No logs.
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/static/index.js"></script>
+</body>
+</html>
