@@ -126,6 +126,3 @@ make playground        # opens UI at http://localhost:18081
 
 Architecture diagram and cover banner prompts are available in the `assets/` folder for image generation.
 
-## Demo Script
-
-See `DEMO_SCRIPT.txt` for a spoken narration walkthrough of the project.
