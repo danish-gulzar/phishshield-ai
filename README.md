@@ -112,31 +112,3 @@ make playground        # opens UI at http://localhost:18081
 1. **Playground won't start**: Ensure port 18081 is not in use. Kill existing process: `Get-Process -Id (Get-NetTCPConnection -LocalPort 18081 -ErrorAction SilentlyContinue).OwningProcess | Stop-Process -Force`
 2. **MCP tools not working**: Verify mcp_server.py is in app/ directory and dependencies are installed
 3. **404 model error**: Check .env has GEMINI_MODEL=gemini-2.5-flash (not gemini-1.5-\*)
-
-## Push to GitHub
-
-1. Create a new repo at https://github.com/new
-   - Name: phishshield-ai
-   - Visibility: Public or Private
-   - Do NOT initialize with README
-
-2. In your terminal:
-
-   ```bash
-   cd phishshield-ai
-   git init
-   git add .
-   git commit -m "Initial commit: PhishShield AI ADK agent"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/phishshield-ai.git
-   git push -u origin main
-   ```
-
-3. Verify .gitignore includes: .env, .venv/, **pycache**/, \*.pyc, .adk/
-
-⚠ NEVER push .env to GitHub. Your API key will be exposed publicly.
-
-## Assets
-
-Architecture diagram and cover banner prompts are available in the `assets/` folder for image generation.
-
